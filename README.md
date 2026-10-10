@@ -56,34 +56,36 @@ pip install -r requirements.txt
 Requires Python 3.9+.
 
 ## Usage
+After installing ReconX and its dependencies, run the following command:
 
-```bash
-python3 -m reconx.main example.com
-```
+reconx -d example.com
 
-You'll be asked to confirm you have authorization to scan the target (see
-[Legal / Ethics](#legal--ethics)). Skip the prompt with `-y` when you already
-know you're authorized (e.g. your own CI pipeline).
+Replace example.com with a domain you own or are explicitly authorized to test.
 
-Options:
+Example: Running ReconX against my domain
 
-```
-python3 -m reconx.main <domain> [options]
+The following command demonstrates how to launch ReconX against my own domain:
 
-  --wordlist PATH     Custom subdomain wordlist (default: wordlists/subdomains_small.txt)
-  --output PATH       Where to save the HTML report (default: output/<domain>_report.html)
-  --skip-crtsh        Skip certificate transparency lookup, DNS brute force only
-  -y, --yes           Skip the interactive authorization confirmation
-```
+reconx -d shubham-lamichhane.com.np
 
-Example:
+ReconX enumerates subdomains, probes discovered hosts, checks for potential exposures, and generates an HTML report containing findings and supporting evidence.
 
-```bash
-python3 -m reconx.main mycompany.com --wordlist wordlists/subdomains_small.txt
-# -> output/mycompany_com_report.html
-```
+Command-line options
+reconx -d <domain> [options]
 
-Open the generated HTML file in a browser to view the report.
+-d, --domain DOMAIN   Target root domain (required)
+--wordlist PATH       Custom subdomain wordlist
+--output PATH         Path for the generated HTML report
+--skip-crtsh          Skip Certificate Transparency lookup
+-y, --yes             Skip the authorization confirmation
+
+For example, to specify a wordlist:
+
+reconx -d example.com --wordlist wordlists/subdomains_small.txt
+
+Open the generated HTML report in your browser to review the results.
+
+Authorization: Only scan domains you own or have explicit permission to test. Confirm that the domain and any discovered subdomains are within your authorized scope.
 
 ## How it works (architecture)
 
@@ -127,8 +129,7 @@ python3 test_fixtures/run_test.py
 python3 test_fixtures/test_takeover_logic.py
 ```
 
-## Limitations (be upfront about these on your CV / in interviews)
-
+## Limitations
 - DNS brute forcing only finds subdomains in the wordlist — it won't find
   something named `x7q2.internal.example.com`. This is standard for any
   recon tool; bigger wordlists trade time for coverage.
@@ -150,19 +151,3 @@ in most jurisdictions (e.g. the U.S. Computer Fraud and Abuse Act, UK Computer
 Misuse Act) regardless of intent. The CLI will ask you to confirm
 authorization before it sends a single packet.
 
-## Putting this on your CV
-
-Suggested line:
-
-> Built ReconX, a Python reconnaissance tool that automates subdomain
-> enumeration (certificate transparency + DNS brute force), live-host
-> fingerprinting, and exposure detection (exposed `.git` repos, admin panels,
-> dangling-CNAME subdomain takeovers), with baseline-response fingerprinting
-> to eliminate false positives; verified with an automated test suite
-> including a false-positive trap case.
-
-Be ready to explain in an interview:
-- Why baseline fingerprinting matters (soft-404 / catch-all hosts)
-- Why the takeover check needs two independent signals, not one
-- What you'd add next (more wordlist entries, a `--threads` flag, JSON output
-  for CI integration, Shodan/Censys as a third enumeration source)
