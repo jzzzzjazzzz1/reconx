@@ -56,36 +56,45 @@ pip install -r requirements.txt
 Requires Python 3.9+.
 
 ## Usage
+
 After installing ReconX and its dependencies, run the following command:
 
+```bash
 reconx -d example.com
+```
 
-Replace example.com with a domain you own or are explicitly authorized to test.
+Replace `example.com` with a domain you own or are explicitly authorized to test.
 
-Example: Running ReconX against my domain
+### Example: Scanning my domain
 
-The following command demonstrates how to launch ReconX against my own domain:
-
+```bash
 reconx -d shubham-lamichhane.com.np
+```
 
 ReconX enumerates subdomains, probes discovered hosts, checks for potential exposures, and generates an HTML report containing findings and supporting evidence.
 
-Command-line options
-reconx -d <domain> [options]
+### Command-line options
 
--d, --domain DOMAIN   Target root domain (required)
---wordlist PATH       Custom subdomain wordlist
---output PATH         Path for the generated HTML report
---skip-crtsh          Skip Certificate Transparency lookup
--y, --yes             Skip the authorization confirmation
+```text
+reconx -d DOMAIN [options]
 
-For example, to specify a wordlist:
+-d, --domain DOMAIN     Target root domain (required)
+--wordlist PATH         Custom subdomain wordlist
+--output PATH           Path for the generated HTML report
+--skip-crtsh            Skip Certificate Transparency lookup
+-y, --yes               Skip the authorization confirmation
+```
 
+### Example: Using a custom wordlist
+
+```bash
 reconx -d example.com --wordlist wordlists/subdomains_small.txt
+```
 
 Open the generated HTML report in your browser to review the results.
 
-Authorization: Only scan domains you own or have explicit permission to test. Confirm that the domain and any discovered subdomains are within your authorized scope.
+**Authorization:** Only scan domains you own or have explicit permission to test. Confirm that the domain and any discovered subdomains are within your authorized scope.
+
 
 ## How it works (architecture)
 
